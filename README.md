@@ -15,10 +15,10 @@ frontend developer sehari-hari.
 
 ### 2. Syntax, Data Types & Operators
 
-- [ ] Primitive types (string, number, boolean, undefined, null, Symbol), Object
-- [ ] `typeof` operator
-- [ ] Type Casting — Explicit vs Implicit (Coercion vs Conversion)
-- [ ] Equality: `==` vs `===` (praktis)
+- [x] Primitive types (string, number, boolean, undefined, null, Symbol), Object
+- [x] `typeof` operator
+- [x] Type Casting — Explicit vs Implicit (Coercion vs Conversion)
+- [x] Equality: `==` vs `===` (praktis)
 
 ### 3. Variables & Scope
 
