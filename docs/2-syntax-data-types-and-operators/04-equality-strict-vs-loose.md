@@ -46,20 +46,49 @@ Dalam penulisan kode frontend modern dan komponen UI, menggunakan `==` adalah su
 
 ### Contoh Kode (Bisa Diketik Ulang Tangan)
 
+```html
+<!-- index.html -->
+<div
+  style="font-family: sans-serif; width: 320px; padding: 12px; border: 1px solid #ccc; border-radius: 6px;"
+>
+  <label for="role-select">Pilih Status Akun:</label>
+  <select id="role-select" style="width: 100%; padding: 4px; margin-top: 4px;">
+    <option value="0">Tamu Tidak Aktif (Value: "0")</option>
+    <option value="1">Member Aktif (Value: "1")</option>
+  </select>
+  <button id="btn-compare" style="margin-top: 8px; cursor: pointer;">
+    Bandingkan dengan Angka 0
+  </button>
+  <div
+    id="compare-log"
+    style="margin-top: 8px; font-size: 13px; line-height: 1.5;"
+  ></div>
+</div>
+```
+
 ```javascript
-// 1. Verifikasi ID pengguna dari URL / Param API
-const userIdFromUrl = "101"; // String dari router
-const currentUserId = 101; // Number dari database
+// app.js
+const selectEl = document.querySelector("#role-select");
+const compareBtn = document.querySelector("#btn-compare");
+const logEl = document.querySelector("#compare-log");
 
-// Berbahaya (Loose): rentan anomali jika nilainya berupa 0, "", atau null
-if (userIdFromUrl == currentUserId) {
-  console.log("Cocok dengan loose equality");
-}
+compareBtn.addEventListener("click", () => {
+  const selectedStr = selectEl.value; // Selalu bertipe string (misal: "0")
+  const targetNum = 0; // Bertipe number: 0
 
-// Praktik Terbaik (Strict): lakukan konversi eksplisit dahulu
-if (Number(userIdFromUrl) === currentUserId) {
-  console.log("Pengguna terverifikasi secara aman dan deterministik");
-}
+  // 1. Loose Equality (==): Terjadi coercion otomatis
+  const isLooseEqual = selectedStr == targetNum;
+
+  // 2. Strict Equality (===): Memeriksa tipe DAN nilai secara ketat
+  const isStrictEqual = selectedStr === targetNum;
+
+  logEl.innerHTML = `
+    Nilai Select: <code>"${selectedStr}"</code> (${typeof selectedStr})<br>
+    Target: <code>${targetNum}</code> (${typeof targetNum})<br>
+    Hasil <code>==</code> (Loose): <strong>${isLooseEqual}</strong> (terkonversi otomatis)<br>
+    Hasil <code>===</code> (Strict): <strong>${isStrictEqual}</strong> (tipe berbeda!)
+  `;
+});
 ```
 
 ## 4. Common Pitfalls / Edge Case

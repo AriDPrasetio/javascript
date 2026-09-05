@@ -38,18 +38,46 @@ Object adalah struktur data non-primitif yang menampung referensi ke lokasi memo
 
 ### Contoh Kode (Bisa Diketik Ulang Tangan)
 
-```javascript
-// 1. Primitive: Pass-by-value (independen)
-let titleA = "Dashboard";
-let titleB = titleA;
-titleB = "Settings";
-console.log(titleA); // "Dashboard" (titleA tidak terpengaruh)
+```html
+<!-- index.html -->
+<div
+  id="profile-card"
+  style="padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-family: sans-serif;"
+>
+  <p><strong>Nama:</strong> <span id="user-name">-</span></p>
+  <p><strong>Peran:</strong> <span id="user-role">-</span></p>
+  <button id="btn-update" style="padding: 6px 12px; cursor: pointer;">
+    Ubah Peran via Salinan Objek
+  </button>
+</div>
+```
 
-// 2. Object: Pass-by-reference (berbagi referensi memori)
-const userProfile = { name: "Budi", role: "Developer" };
-const editProfile = userProfile;
-editProfile.role = "Lead";
-console.log(userProfile.role); // "Lead" (userProfile ikut berubah!)
+```javascript
+// app.js
+// 1. Primitive: Pass-by-value (tidak mengubah variabel asal)
+let titleA = "Frontend Dev";
+let titleB = titleA;
+titleB = "Tech Lead"; // titleA tetap "Frontend Dev"
+
+// 2. Object: Pass-by-reference (berbagi alamat memori yang sama)
+const userProfile = { name: "Budi", role: titleA };
+
+const nameEl = document.querySelector("#user-name");
+const roleEl = document.querySelector("#user-role");
+const updateBtn = document.querySelector("#btn-update");
+
+// Render awal
+nameEl.textContent = userProfile.name;
+roleEl.textContent = userProfile.role;
+
+updateBtn.addEventListener("click", () => {
+  const profileAlias = userProfile; // Menyalin referensi, bukan membuat objek baru!
+  profileAlias.role = titleB; // userProfile.role ikut berubah secara mutasi
+
+  // Menampilkan bukti bahwa objek asli ikut berubah di layar
+  roleEl.textContent = `${userProfile.role} (Dimutasi lewat profileAlias!)`;
+  roleEl.style.color = "green";
+});
 ```
 
 ## 4. Common Pitfalls / Edge Case

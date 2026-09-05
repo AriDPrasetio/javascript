@@ -47,20 +47,45 @@ typeof operand; // Tanda kurung hanya berfungsi untuk mengelompokkan ekspresi
 
 ### Contoh Kode (Bisa Diketik Ulang Tangan)
 
-```javascript
-// 1. Pemeriksaan callback opsional pada komponen UI
-function renderButton(label, onClick) {
-  if (typeof onClick === "function") {
-    onClick();
-  } else {
-    console.warn("onClick callback tidak disediakan atau bukan fungsi!");
-  }
-}
+```html
+<!-- index.html -->
+<div
+  style="font-family: sans-serif; display: flex; flex-direction: column; gap: 8px; width: 280px;"
+>
+  <label for="user-age">Masukkan Umur:</label>
+  <input id="user-age" type="number" value="25" />
+  <button id="btn-inspect" style="cursor: pointer; padding: 6px;">
+    Cek Tipe Data Nilai Input
+  </button>
+  <p
+    id="result-box"
+    style="margin: 0; padding: 6px; background: #f3f4f6; border-radius: 4px;"
+  >
+    Hasil: belum dicek
+  </p>
+</div>
+```
 
-// 2. Pemeriksaan aman variabel yang belum dideklarasikan
-if (typeof undeclaredConfigVariable === "undefined") {
-  console.log("Variabel konfigurasi global belum dimuat di browser.");
-}
+```javascript
+// app.js
+const ageInput = document.querySelector("#user-age");
+const inspectBtn = document.querySelector("#btn-inspect");
+const resultBox = document.querySelector("#result-box");
+
+inspectBtn.addEventListener("click", () => {
+  // Fakta Kritis Frontend: input.value SELALU bertipe 'string' meskipun type="number"
+  const rawValue = ageInput.value;
+  const rawType = typeof rawValue;
+
+  // Type guarding sebelum pemrosesan
+  let convertedNumber = Number(rawValue);
+  let convertedType = typeof convertedNumber;
+
+  resultBox.innerHTML = `
+    Nilai Asli: <strong>"${rawValue}"</strong> (${rawType})<br>
+    Setelah Number(): <strong>${convertedNumber}</strong> (${convertedType})
+  `;
+});
 ```
 
 ## 4. Common Pitfalls / Edge Case
