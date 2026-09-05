@@ -28,31 +28,55 @@ Saat fungsi luar dieksekusi, ia menciptakan sebuah _lexical environment_. Ketika
 
 ### Contoh Kode (Bisa Diketik Ulang Tangan)
 
-```javascript
-// 1. Enkapsulasi State Privat (Data Privacy)
-function createCounter(initialValue = 0) {
-  let count = initialValue; // Variabel privat terkunci di closure
+```html
+<!-- index.html -->
+<div
+  style="font-family: sans-serif; width: 260px; padding: 12px; border: 1px solid #ccc; border-radius: 6px;"
+>
+  <p>Skor Sesi: <strong id="score-display">0</strong></p>
+  <button id="btn-add" style="padding: 6px 12px; cursor: pointer;">
+    + Tambah Poin
+  </button>
+  <button id="btn-reset" style="padding: 6px 12px; cursor: pointer;">
+    Reset
+  </button>
+</div>
+```
 
+```javascript
+// app.js
+// Factory function: Mengenkapsulasi state variabel 'score' privat di dalam closure
+function createScoreManager(displayElement, initialScore = 0) {
+  let score = initialScore; // Variabel privat: tidak bisa diakses langsung dari window!
+
+  function updateDOM() {
+    displayElement.textContent = score;
+  }
+
+  // Mengembalikan objek berisi method yang memegang closure ke variabel 'score'
   return {
-    increment() {
-      count += 1;
-      return count;
+    addPoint(points = 1) {
+      score += points;
+      updateDOM();
     },
-    decrement() {
-      count -= 1;
-      return count;
-    },
-    getValue() {
-      return count;
+    resetScore() {
+      score = initialScore;
+      updateDOM();
     },
   };
 }
 
-const counter = createCounter(10);
-console.log(counter.increment()); // 11
-console.log(counter.increment()); // 12
-console.log(counter.getValue()); // 12
-// console.log(counter.count);    // undefined (variabel privat terlindungi!)
+const scoreDisplay = document.querySelector("#score-display");
+const scoreTracker = createScoreManager(scoreDisplay, 0);
+
+document
+  .querySelector("#btn-add")
+  .addEventListener("click", () => scoreTracker.addPoint(5));
+document
+  .querySelector("#btn-reset")
+  .addEventListener("click", () => scoreTracker.resetScore());
+
+// console.log(score); // ReferenceError: score is not defined (Aman & terisolasi!)
 ```
 
 ## 4. Common Pitfalls / Edge Case

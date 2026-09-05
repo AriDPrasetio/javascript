@@ -47,20 +47,47 @@ Hanya 8 nilai berikut yang dievaluasi menjadi `false` saat di-coerce ke boolean;
 
 ### Contoh Kode (Bisa Diketik Ulang Tangan)
 
+```html
+<!-- index.html -->
+<div
+  style="font-family: sans-serif; width: 320px; padding: 12px; border: 1px solid #ccc; border-radius: 6px;"
+>
+  <label for="qty-input">Jumlah Item Beli:</label>
+  <input id="qty-input" type="number" value="3" style="width: 60px;" />
+  <button id="btn-calc" style="cursor: pointer; margin-top: 8px;">
+    + Tambah 2 Item Bonus
+  </button>
+
+  <div style="margin-top: 10px; font-size: 14px;">
+    <p id="coercion-bug" style="color: red; margin: 4px 0;">
+      Bug Coercion (+): -
+    </p>
+    <p id="conversion-fixed" style="color: green; margin: 4px 0;">
+      Solusi Conversion: -
+    </p>
+  </div>
+</div>
+```
+
 ```javascript
-// 1. Jebakan input form DOM
-const inputQty = "3"; // Nilai string dari DOM input
-const addedQty = 2;
+// app.js
+const qtyInput = document.querySelector("#qty-input");
+const calcBtn = document.querySelector("#btn-calc");
+const bugEl = document.querySelector("#coercion-bug");
+const fixedEl = document.querySelector("#conversion-fixed");
 
-// Salah: Implicit coercion memicu konkatenasi string
-console.log(inputQty + addedQty); // "32"
+calcBtn.addEventListener("click", () => {
+  const inputVal = qtyInput.value; // Nilai string dari DOM: "3"
+  const bonus = 2;
 
-// Benar: Explicit conversion sebelum kalkulasi
-console.log(Number(inputQty) + addedQty); // 5
+  // 1. Jebakan Implicit Coercion: Operator '+' melakukan string concatenation
+  const buggyResult = inputVal + bonus; // Menghasilkan "32"
+  bugEl.textContent = `Bug Coercion ("${inputVal}" + ${bonus}) = ${buggyResult} item!`;
 
-// 2. Coercion pada operator aritmatika pengurangan
-console.log("10" - 4); // 6 (berubah menjadi number)
-console.log("sepuluh" - 4); // NaN (gagal dikonversi ke angka valid)
+  // 2. Solusi Explicit Conversion: Konversi ke Number sebelum operasi matematika
+  const correctResult = Number(inputVal) + bonus; // Menghasilkan 5
+  fixedEl.textContent = `Solusi Conversion (Number("${inputVal}") + ${bonus}) = ${correctResult} item (Benar)`;
+});
 ```
 
 ## 4. Common Pitfalls / Edge Case

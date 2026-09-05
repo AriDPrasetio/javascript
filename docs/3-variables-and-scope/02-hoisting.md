@@ -30,26 +30,44 @@ Memahami hoisting adalah kunci menghindari bug `undefined` tak terduga dan error
 
 ### Contoh Kode (Bisa Diketik Ulang Tangan)
 
+```html
+<!-- index.html -->
+<div
+  style="font-family: sans-serif; width: 320px; padding: 12px; border: 1px solid #ddd; border-radius: 6px;"
+>
+  <p id="hoist-log">Status Eksekusi: Menunggu klik</p>
+  <button id="btn-run" style="cursor: pointer; padding: 6px 12px;">
+    Uji Eksekusi Hoisting
+  </button>
+</div>
+```
+
 ```javascript
-// 1. Hoisting pada Function Declaration (Berhasil)
-greetUser("Alice"); // Mencetak: "Halo, Alice!"
+// app.js
+const logEl = document.querySelector("#hoist-log");
+const runBtn = document.querySelector("#btn-run");
 
-function greetUser(name) {
-  console.log(`Halo, ${name}!`);
+runBtn.addEventListener("click", () => {
+  // 1. Function Declaration: Bisa dipanggil SEBELUM baris definisinya (Hoisting Sukses)
+  const greeting = formatUserGreeting("Kyo");
+
+  // 2. TDZ (Temporal Dead Zone) pada let: Mengakses sebelum deklarasi memicu ReferenceError
+  let tdzMessage = "";
+  try {
+    // console.log(userRole); // Memicu ReferenceError jika di-uncomment
+    let userRole = "Admin";
+    tdzMessage = `Role: ${userRole}`;
+  } catch (err) {
+    tdzMessage = err.message;
+  }
+
+  logEl.innerHTML = `<strong>${greeting}</strong> | ${tdzMessage}`;
+});
+
+// Definisi diletakkan di bagian paling bawah file (tetap berhasil di-hoist!)
+function formatUserGreeting(name) {
+  return `Halo, ${name}! (Dari hoisted function)`;
 }
-
-// 2. Hoisting pada var vs let/const
-console.log(legacyVar); // Mencetak: undefined (tidak melempar error)
-var legacyVar = "Nilai Legacy";
-
-// console.log(modernLet); // ReferenceError: Cannot access 'modernLet' before initialization
-let modernLet = "Nilai Modern";
-
-// 3. Jebakan Function Expression
-// renderHeader(); // TypeError: renderHeader is not a function (karena masih bernilai undefined)
-var renderHeader = function () {
-  console.log("Render Header UI");
-};
 ```
 
 ## 4. Common Pitfalls / Edge Case

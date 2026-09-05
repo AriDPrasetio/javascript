@@ -41,22 +41,38 @@ Menggunakan kata kunci variabel yang tepat mencegah bug kebocoran variabel (_var
 
 ### Contoh Kode (Bisa Diketik Ulang Tangan)
 
+```html
+<!-- index.html -->
+<div
+  style="font-family: sans-serif; width: 300px; padding: 12px; border: 1px solid #ddd; border-radius: 6px;"
+>
+  <p id="status-display">Status Server: Normal</p>
+  <button id="btn-toggle">Ubah Status (let)</button>
+  <button id="btn-config">Naikkan Timeout (const obj)</button>
+</div>
+```
+
 ```javascript
-// 1. Block Scope pada if / loop
-if (true) {
-  var globalLeak = "Saya bisa diakses di luar!";
-  let scopedText = "Saya terkunci di dalam blok ini.";
-}
-console.log(globalLeak); // Berhasil diakses
-// console.log(scopedText); // ReferenceError: scopedText is not defined
+// app.js
+// 1. const untuk binding elemen DOM & objek konfigurasi
+const displayEl = document.querySelector("#status-display");
+const toggleBtn = document.querySelector("#btn-toggle");
+const configBtn = document.querySelector("#btn-config");
 
-// 2. Imutabilitas Binding pada const
-const apiConfig = { endpoint: "/users", timeout: 5000 };
-// apiConfig = {}; // Error: TypeError: Assignment to constant variable.
+const serverConfig = { timeoutMs: 3000 }; // Objek const: binding terkunci, tapi properti mutable!
 
-// Properti internal objek const tetap mutable:
-apiConfig.timeout = 10000; // Sah dan diperbolehkan!
-console.log(apiConfig.timeout); // 10000
+// 2. let untuk variabel status yang nilainya akan dihitung ulang
+let isMaintenance = false;
+
+toggleBtn.addEventListener("click", () => {
+  isMaintenance = !isMaintenance; // Sah: let bisa di-reassign
+  displayEl.textContent = `Status Server: ${isMaintenance ? "Maintenance" : "Normal"}`;
+});
+
+configBtn.addEventListener("click", () => {
+  serverConfig.timeoutMs += 1000; // Sah: memodifikasi properti internal objek const
+  displayEl.textContent = `Timeout Baru: ${serverConfig.timeoutMs} ms (const termutasi)`;
+});
 ```
 
 ## 4. Common Pitfalls / Edge Case
