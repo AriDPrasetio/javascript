@@ -34,26 +34,43 @@ Ketika mencari sebuah variabel, JavaScript akan memeriksa scope lokal terlebih d
 
 ### Contoh Kode (Bisa Diketik Ulang Tangan)
 
-```javascript
-const appTheme = "dark"; // Global Scope
+```html
+<!-- index.html -->
+<div
+  id="dashboard"
+  style="font-family: sans-serif; padding: 12px; border: 2px solid #333; border-radius: 8px;"
+>
+  <p>Tema Global: <strong id="global-text">dark</strong></p>
+  <div id="inner-banner" style="padding: 8px; border-radius: 4px;">
+    Banner Blok Scope: <span id="banner-text">-</span>
+  </div>
+</div>
+```
 
-function initDashboard() {
-  const pageTitle = "Overview"; // Function Scope
+```javascript
+// app.js
+const appTheme = "dark"; // 1. Global Scope (tersedia untuk seluruh file)
+
+function renderDashboard() {
+  const pageTitle = "Dashboard Analytics"; // 2. Function Scope (hanya hidup di dalam fungsi ini)
+  const bannerEl = document.querySelector("#inner-banner");
 
   if (true) {
-    const badgeColor = "blue"; // Block Scope
-    const appTheme = "light"; // Shadowing: menutupi 'appTheme' global di dalam blok ini
+    // 3. Block Scope & Shadowing: Variabel 'appTheme' lokal menutupi variabel global di blok ini saja
+    const appTheme = "emerald";
+    const badgeBg = "#10b981"; // Block Scope
 
-    console.log(badgeColor); // "blue"
-    console.log(appTheme); // "light" (scope blok)
-    console.log(pageTitle); // "Overview" (mencari lewat scope chain)
+    bannerEl.style.backgroundColor = badgeBg;
+    bannerEl.style.color = "#ffffff";
+    bannerEl.textContent = `${pageTitle} — Mode: ${appTheme} (Shadowed)`;
   }
 
-  // console.log(badgeColor); // ReferenceError: badgeColor is not defined
+  // console.log(badgeBg); // Error: ReferenceError (badgeBg terkunci di blok if)
 }
 
-initDashboard();
-console.log(appTheme); // "dark" (variabel global tetap utuh)
+renderDashboard();
+document.querySelector("#global-text").textContent =
+  `${appTheme} (Variabel global tidak terpengaruh)`;
 ```
 
 ## 4. Common Pitfalls / Edge Case
