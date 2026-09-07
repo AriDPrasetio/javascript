@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Latihan | Type Casting</title>
+    <style>
+      div {
+        font-family: sans-serif;
+        inline-size: 320px;
+        padding: 0.75rem;
+        border: 1px solid #ccc;
+        border-radius: 0.25rem;
+      }
+      div:nth-child(2) {
+        margin-block-start: 0.75rem;
+        font-size: 0.85rem;
+      }
+      button {
+        cursor: pointer;
+        margin-block-start: 0.5rem;
+      }
+      #coercian-bug {
+        color: red;
+        margin: 0.25rem 0;
+      }
+      #conversion-fixed {
+        color: green;
+        margin: 0.25rem 0;
+      }
+    </style>
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <div>
+      <label for="qty-input">Jumah Item Beli&colon;</label>
+      <input type="number" id="qty-input" value="3" />
+      <button type="button" id="btn-calc">&plus; Tambah 2 Item Bonus</button>
+    </div>
+    <div>
+      <p id="coercian-bug">Bug Coercian &lpar;&plus;&rpar;&colon; &dash;</p>
+      <p id="conversion-fixed">Solusi Conversion&colon; &dash;</p>
+    </div>
+  </body>
+</html>

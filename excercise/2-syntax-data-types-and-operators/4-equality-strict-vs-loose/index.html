@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Latihan | Equality - Strict vs Loose</title>
+    <style>
+      div {
+        font-family: sans-serif;
+        inline-size: 320px;
+        padding: 0.75rem;
+        border: 1px solid #ccc;
+        border-radius: 0.35rem;
+      }
+      button {
+        inline-size: 100%;
+        padding: 0.25rem;
+        margin-block-start: 0.25rem;
+        cursor: pointer;
+      }
+      .compare-log {
+        inline-size: 92%;
+        margin-block-start: 0.5rem;
+        font-size: 0.85rem;
+        line-height: 1.5;
+      }
+    </style>
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <div>
+      <label for="role-select">Pilih Status Akun&colon;</label>
+      <select name="role-select" id="role-select">
+        <option value="0">
+          Member Tidak Aktif &lpar;Value&colon; &ldquo;0&rdquo;&rpar;
+        </option>
+        <option value="1">
+          Member Aktif &lpar;Value&colon; &ldquo;1&rdquo;&rpar;
+        </option>
+      </select>
+      <button id="btn-compare">Bandingkan dengan angka 0</button>
+      <div id="compare-log" class="compare-log"></div>
+    </div>
+  </body>
+</html>
